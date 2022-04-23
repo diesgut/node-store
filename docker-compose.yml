@@ -1,0 +1,18 @@
+#version: 3.3 opcional desde la verison 1.27.0 de Docker.
+
+#En cuanto a la image, puedes omitir latest o en su defecto seleccionar la versión que buscas:
+services:
+    postgres:
+        container_name: postgres
+        image: postgres
+        restart: always
+        ports:
+            - ${DB_PORT_EXTERNAL}:${DB_PORT_INTERNAL}
+        expose:
+            - '5432'
+        environment:
+            POSTGRES_DB: ${DB_NAME}
+            POSTGRES_USER: ${DB_USER}
+            POSTGRES_PASSWORD: ${DB_PASSWORD}
+        volumes:
+                    - ./postgres_data:/var/lib/postgresql/data
