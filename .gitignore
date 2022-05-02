@@ -220,3 +220,4 @@ $RECYCLE.BIN/
 
 postgres_data
 docker
+mysql_data

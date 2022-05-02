@@ -1,13 +1,13 @@
 const express = require("express");
-const productsServices = require("../services/products.services");
+const productServices = require("../services/product.service");
 const validatorHandler = require("../middlewares/validator.handler");
-const { createProductSchema, updateProductSchema, getProductSchema } = require('./../schemas/product.schema');
+const { createProductSchema, updateProductSchema, getProductSchema, addItemSchema } = require('./../schemas/product.schema');
 
 const router=express.Router();
 
 
 router.get("/", async (req, res) =>{
-    const products=await productsServices.all();
+    const products=await productServices.all();
     res.json(products);
 });
 
@@ -18,7 +18,7 @@ router.get("/:id",
         //  const productId=req.params.id;
         const { id }=req.params;
         //todos los parametros enviados por url params, seran recibidos como string
-        const product=await productsServices.findById(id);
+        const product=await productServices.findById(id);
         res.json(product);
     } catch (error) {
         next(error);
@@ -27,14 +27,17 @@ router.get("/:id",
 
 router.post("/",
     validatorHandler(createProductSchema, 'body'),
-    async (req, res) =>{
-
+    async (req, res, next) =>{
+      try {
         const body=req.body;
-        const product=await productsServices.create(body);
+        const product=await productServices.create(body);
         res.status(201).json({
             message: 'created',
             data: product
         });
+      } catch (error) {
+          next(error);
+      }
 });
 
 //en un metodo put se deben enviar todos los atributos del producto
@@ -62,7 +65,7 @@ router.patch("/:id",
     async (req, res, next) =>{
     try {
         const id=req.params.id;
-        const product=await productsServices.update(id, req.body);
+        const product=await productServices.update(id, req.body);
         res.json({
             message: 'update partial',
             data: product,
@@ -76,11 +79,26 @@ router.patch("/:id",
 router.delete("/:id", async (req, res, next) =>{
     try {
         const productId=req.params.id;
-        const rpta = await productsServices.delete(productId);
+        const rpta = await productServices.delete(productId);
         res.json(rpta);
     } catch (error) {
         next(error);
     }
+});
+
+router.post("/add-item",
+    validatorHandler(addItemSchema, 'body'),
+    async (req, res, next) =>{
+      try {
+        const body=req.body;
+        const productItem=await productServices.addItem(body);
+        res.status(201).json({
+            message: 'created',
+            data: productItem
+        });
+      } catch (error) {
+          next(error);
+      }
 });
 
 module.exports = router;

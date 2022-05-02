@@ -7,7 +7,7 @@ services:
         image: postgres
         restart: always
         ports:
-            - ${DB_PORT_EXTERNAL}:${DB_PORT_INTERNAL}
+            - ${DB_PORT_PG}:${DB_PORT_INTERNAL_PG}
         expose:
             - '5432'
         environment:
@@ -16,3 +16,16 @@ services:
             POSTGRES_PASSWORD: ${DB_PASSWORD}
         volumes:
                     - ./postgres_data:/var/lib/postgresql/data
+
+    mysql:
+        image: mysql
+        restart: always
+        ports:
+            - ${DB_PORT}:${DB_PORT_INTERNAL_MY}
+        environment:
+            MYSQL_DATABASE: ${DB_NAME}
+            MYSQL_ROOT_PASSWORD: mysql
+            MYSQL_USER: ${DB_USER}
+            MYSQL_PASSWORD: ${DB_PASSWORD}
+        volumes:
+            - ./mysql_data:/var/lib/mysql

@@ -3,7 +3,7 @@ const cors = require("cors");
 const routerApi=require("./routes");
 
 // Importar middleware de errores
-const { logErrors, errorHandler, boomErrorHandler } = require('./middlewares/error.handlers.js'); 
+const { logErrors, errorHandler, boomErrorHandler, ormErrorHandler } = require('./middlewares/error.handlers.js');
 
 const app = express();
 const port = 3000;
@@ -31,6 +31,7 @@ routerApi(app);
 
 // Utilizamos los middleware. Siempre deben ir después del routing:
 app.use(logErrors);
+app.use(ormErrorHandler);
 app.use(boomErrorHandler);
 app.use(errorHandler);
 
