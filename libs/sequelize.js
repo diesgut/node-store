@@ -23,5 +23,5 @@ setupModels(sequelize);
 
 sequelize.sync(); //lee los modelos y con los schemas crea las tablas
 
-module.exports = sequelize;
+module.exports = {models: sequelize.models, Sequelize};
 
